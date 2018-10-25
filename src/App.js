@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import Header from "./components/header";
+import Form from "./components/form";
+import Chart from "./components/chart";
 
 
 class App extends Component {
   render() {
     return (
-      <h1>hello</h1>
+      <div>
+      <Header/>
+      <div className="container section">
+        <div className="row">
+          <Form/>
+          <Chart/>
+        </div>
+      </div>
+      </div>
+
+
     );
   }
 }
