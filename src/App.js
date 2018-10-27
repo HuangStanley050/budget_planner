@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import Header from "./components/header";
 import Form from "./components/form";
 import Chart from "./components/chart";
