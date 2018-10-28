@@ -5,7 +5,8 @@ import * as actions from "../store/actions/expenses.js";
 class Form extends Component {
     state = {
         name: null,
-        cost: null
+        cost: null,
+        error: null
     }
 
     inputHandler = (e) => {
@@ -18,8 +19,23 @@ class Form extends Component {
 
     submitHander = (e) => {
         e.preventDefault();
-        console.log(this.state);
-        this.props.createExp(this.state);
+        //console.log(this.state);
+        if (this.state.name && this.state.cost) {
+
+            this.props.createExp({ name: this.state.name, cost: parseInt(this.state.cost) });
+            this.setState({
+                ...this.state,
+                name: '',
+                cost: '',
+                error: null
+            });
+        }
+        else {
+            this.setState({
+                ...this.state,
+                error: "Invalid Input"
+            });
+        }
     }
     render() {
         return (
@@ -29,12 +45,12 @@ class Form extends Component {
                 <span className="card-title indigo-text">Add Item</span>
                 
                 <div className="input-field">
-                 <input onChange={this.inputHandler}type="text" id="name"/>
+                 <input onChange={this.inputHandler} type="text" id="name" value={this.state.name}/>
                  <label forhtml="name">Item Name</label>
                 </div>
                 
                 <div className="input-field">
-                 <input onChange={this.inputHandler} type="text" id="cost"/>
+                 <input onChange={this.inputHandler} type="text" id="cost" value={this.state.cost}/>
                  <label forhtml="name">Cost</label>
                 </div>
                 
@@ -43,7 +59,7 @@ class Form extends Component {
                 </div>
                 
                 <div className="input-field center">
-                 <p className="red-text" id="error">test</p>
+                 <p className="red-text" id="error">{this.state.error}</p>
                 </div>
                 </div>
             </form>
