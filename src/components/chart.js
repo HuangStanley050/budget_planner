@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
 import * as d3 from "d3";
 
 class Chart extends Component {
@@ -46,4 +49,11 @@ class Chart extends Component {
     }
 }
 
-export default Chart;
+const mapStateToProps = state => {
+    console.log(state);
+    return {
+
+    };
+};
+
+export default compose(firestoreConnect([{ collection: "expenses" }]), connect(mapStateToProps))(Chart);
