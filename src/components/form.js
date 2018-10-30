@@ -4,8 +4,8 @@ import * as actions from "../store/actions/expenses.js";
 
 class Form extends Component {
     state = {
-        name: null,
-        cost: null,
+        name: "",
+        cost: "",
         error: null
     }
 
