@@ -8,6 +8,16 @@ class Chart extends Component {
 
     componentDidMount() {
 
+        this.createPie();
+        console.log("Mounted");
+    }
+
+    componentDidUpdate() {
+        this.createPie();
+        console.log(this.props.data);
+    }
+
+    createPie = () => {
         const dims = {
             height: 300,
             width: 300,
@@ -30,16 +40,17 @@ class Chart extends Component {
         const pie = d3.pie()
             .sort(null)
             .value(d => d.cost);
+
         const angles = pie([{ name: 'rent', cost: 500 }, { name: 'bills', cost: 300 }, { name: 'gaming', cost: 200 }]);
         //console.log(angles);
+
         const arcPath = d3.arc()
             .outerRadius(dims.radius)
             .innerRadius(dims.radius / 2);
-        console.log(arcPath(angles[0]));
-
     }
 
     render() {
+
         return (
             <div className="col s12 m5 push-m1">
                 <div className="canvas">
@@ -50,9 +61,10 @@ class Chart extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
-    return {
+    //console.log(state);
 
+    return {
+        data: state.firestore.ordered.expenses
     };
 };
 
