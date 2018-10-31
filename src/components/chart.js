@@ -5,6 +5,7 @@ import { firestoreConnect } from "react-redux-firebase";
 import * as d3 from "d3";
 
 class Chart extends Component {
+    myRef = React.createRef();
 
     componentDidMount() {
 
@@ -24,17 +25,20 @@ class Chart extends Component {
             radius: 150
         };
 
+
         const cent = {
             x: (dims.width / 2 + 5),
             y: (dims.height / 2 + 5)
         };
 
-        const svg = d3.select(".canvas")
-            .append('svg')
+        const svg = d3.select(this.myREF)
+            //.append('svg')
             .attr('width', dims.width + 150)
             .attr('height', dims.height + 150);
 
-        const graph = svg.append('g')
+        //console.log(svg);
+
+        const graph = svg.select('g')
             .attr('transform', `translate(${cent.x},${cent.y})`);
 
         const pie = d3.pie()
@@ -47,13 +51,17 @@ class Chart extends Component {
         const arcPath = d3.arc()
             .outerRadius(dims.radius)
             .innerRadius(dims.radius / 2);
+
     }
 
     render() {
 
         return (
             <div className="col s12 m5 push-m1">
-                <div className="canvas">
+                <div className="canvas" >
+                 <svg ref={el=>this.myREF=el}>
+                 <g></g>
+                 </svg>
                 </div>
             </div>
         );
