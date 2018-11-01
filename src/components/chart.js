@@ -5,7 +5,7 @@ import { firestoreConnect } from "react-redux-firebase";
 import * as d3 from "d3";
 
 class Chart extends Component {
-    myRef = React.createRef();
+
 
 
     componentDidMount() {
@@ -15,11 +15,11 @@ class Chart extends Component {
     }
 
     componentDidUpdate() {
-        this.createPie(this.props.data);
-        //console.log(this.props.data);
+        this.createPie();
+        console.log("updated!!");
     }
 
-    createPie = (data) => {
+    createPie = () => {
         const dims = {
             height: 300,
             width: 300,
@@ -31,14 +31,14 @@ class Chart extends Component {
             x: (dims.width / 2 + 5),
             y: (dims.height / 2 + 5)
         };
-        console.log(data);
+
         const svg = d3.select(this.myREF)
             //.append('svg')
             .attr('width', dims.width + 150)
             .attr('height', dims.height + 150);
 
-        //console.log(svg);
 
+        const color = d3.scaleOrdinal(d3['schemeSet3']);
         const graph = svg.select('g')
             .attr('transform', `translate(${cent.x},${cent.y})`);
 
@@ -46,25 +46,32 @@ class Chart extends Component {
             .sort(null)
             .value(d => d.cost);
 
-        //const angles = pie([{ name: 'rent', cost: 500 }, { name: 'bills', cost: 300 }, { name: 'gaming', cost: 200 }]);
-        //console.log(angles);
+
 
         const arcPath = d3.arc()
             .outerRadius(dims.radius)
             .innerRadius(dims.radius / 2);
 
-        if (data) {
-            const paths = graph.selectAll('path')
-                .data(pie(data))
+        const data = this.props.data ? this.props.data : null;
+        //console.log(data);
 
-            console.log(paths.enter());
+        if (data) { //if the data is available from reducer
+            color.domain(data.map(d => d.name));
+            const paths = graph.selectAll('path')
+                .data(pie(data));
+
+            console.log(pie(data));
+            //console.log(paths.enter());
 
             paths.enter()
                 .append('path')
                 .attr("class", 'arc')
                 .attr('d', arcPath)
                 .attr('stroke', '#fff')
-                .attr('stroke-width', '3px');
+                .attr('stroke-width', '3px')
+                .attr('fill', d => color(d.data.name));
+
+
         }
 
     }
