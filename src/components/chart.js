@@ -39,6 +39,7 @@ class Chart extends Component {
 
 
         const color = d3.scaleOrdinal(d3['schemeSet3']);
+
         const graph = svg.select('g')
             .attr('transform', `translate(${cent.x},${cent.y})`);
 
@@ -53,7 +54,7 @@ class Chart extends Component {
             .innerRadius(dims.radius / 2);
 
         const data = this.props.data ? this.props.data : null;
-        //console.log(data);
+        console.log(data);
 
         if (data) { //if the data is available from reducer
             color.domain(data.map(d => d.name));
