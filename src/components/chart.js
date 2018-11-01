@@ -54,16 +54,19 @@ class Chart extends Component {
             .innerRadius(dims.radius / 2);
 
         const data = this.props.data ? this.props.data : null;
-        console.log(data);
+        //console.log(data);
 
         if (data) { //if the data is available from reducer
             color.domain(data.map(d => d.name));
             const paths = graph.selectAll('path')
                 .data(pie(data));
 
-            console.log(pie(data));
+            //console.log(pie(data));
             //console.log(paths.enter());
-
+            paths.exit().remove(); //remove an element in database
+            
+            paths.attr('d', arcPath); //update an element database
+            
             paths.enter()
                 .append('path')
                 .attr("class", 'arc')
