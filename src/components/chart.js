@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import * as d3 from "d3";
 
+
+
 class Chart extends Component {
 
 
@@ -53,6 +55,14 @@ class Chart extends Component {
             .outerRadius(dims.radius)
             .innerRadius(dims.radius / 2);
 
+        const arcTweenEnter = (d) => {
+            let i = d3.interpolate(d.endAngle, d.startAngle);
+            return t => {
+                d.startAngle = i(t);
+                return arcPath(d);
+            };
+        };
+
         const data = this.props.data ? this.props.data : null;
         //console.log(data);
 
@@ -64,16 +74,18 @@ class Chart extends Component {
             //console.log(pie(data));
             //console.log(paths.enter());
             paths.exit().remove(); //remove an element in database
-            
+
             paths.attr('d', arcPath); //update an element database
-            
+
             paths.enter()
                 .append('path')
                 .attr("class", 'arc')
-                .attr('d', arcPath)
+                //.attr('d', arcPath)
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '3px')
-                .attr('fill', d => color(d.data.name));
+                .attr('fill', d => color(d.data.name))
+                .transition().duration(750)
+                .attrTween("d", arcTweenEnter);
 
 
         }
