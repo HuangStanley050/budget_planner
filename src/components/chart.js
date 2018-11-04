@@ -71,6 +71,15 @@ class Chart extends Component {
             };
         };
 
+        function arcTweenUpdate(d) {
+            //console.log(this._current, d);
+            let i = d3.interpolate(this._current, d);
+            this._current = i(1);
+            return function(t) {
+                return arcPath(i(t));
+            };
+        }
+
         const data = this.props.data ? this.props.data : null;
         //console.log(data);
 
@@ -86,7 +95,9 @@ class Chart extends Component {
                 .attrTween("d", arcTweenExit)
                 .remove(); //remove an element in database
 
-            paths.attr('d', arcPath); //update an element database
+            paths.attr('d', arcPath)
+                .transition().duration(750)
+                .attrTween("d", arcTweenUpdate) //update an element database
 
             paths.enter()
                 .append('path')
@@ -95,6 +106,7 @@ class Chart extends Component {
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '3px')
                 .attr('fill', d => color(d.data.name))
+                .each(function(d) { this._current = d })
                 .transition().duration(750)
                 .attrTween("d", arcTweenEnter);
 
