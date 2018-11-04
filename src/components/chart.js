@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
+import { legendColor } from 'd3-svg-legend';
 import * as d3 from "d3";
+
 
 
 
@@ -42,8 +44,12 @@ class Chart extends Component {
 
         const color = d3.scaleOrdinal(d3['schemeSet3']);
 
+
+
         const graph = svg.select('g')
             .attr('transform', `translate(${cent.x},${cent.y})`);
+
+
 
         const pie = d3.pie()
             .sort(null)
@@ -80,11 +86,24 @@ class Chart extends Component {
             };
         }
 
+        //create d3 legend for the chart
+        const legendGroup = svg.select('#legend')
+            .attr('transform', `translate(${dims.width+40},10)`);
+
+        const legend = legendColor()
+            .shape('circle')
+            .shapePadding(10)
+            .scale(color);
+
         const data = this.props.data ? this.props.data : null;
         //console.log(data);
 
         if (data) { //if the data is available from reducer
             color.domain(data.map(d => d.name));
+            //update and call legend
+            legendGroup.call(legend);
+            legendGroup.selectAll('text').attr('fill', 'white');
+
             const paths = graph.selectAll('path')
                 .data(pie(data));
 
@@ -122,6 +141,7 @@ class Chart extends Component {
                 <div className="canvas" >
                  <svg ref={el=>this.myREF=el}>
                  <g></g>
+                 <g id="legend"></g>
                  </svg>
                 </div>
             </div>
