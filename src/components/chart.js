@@ -63,6 +63,14 @@ class Chart extends Component {
             };
         };
 
+        const arcTweenExit = (d) => {
+            let i = d3.interpolate(d.startAngle, d.endAngle);
+            return t => {
+                d.startAngle = i(t);
+                return arcPath(d);
+            };
+        };
+
         const data = this.props.data ? this.props.data : null;
         //console.log(data);
 
@@ -73,7 +81,10 @@ class Chart extends Component {
 
             //console.log(pie(data));
             //console.log(paths.enter());
-            paths.exit().remove(); //remove an element in database
+            paths.exit()
+                .transition().duration(750)
+                .attrTween("d", arcTweenExit)
+                .remove(); //remove an element in database
 
             paths.attr('d', arcPath); //update an element database
 
