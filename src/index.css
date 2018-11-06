@@ -14,4 +14,15 @@ header{
   margin-bottom:40px;
 }
 
+.tip{
+  padding:10px;
+  background:#333;
+  color:white;
+}
+
+.tip .delete{
+  color:red;
+  font-size:0.8rem;
+}
+
 

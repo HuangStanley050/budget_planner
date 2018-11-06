@@ -2,16 +2,11 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
-//import { handleMouseOver, handleMouseOut } from "../helper/d3events";
 import { legendColor } from 'd3-svg-legend';
 import * as actions from "../store/actions/expenses.js";
 import * as d3 from "d3";
-/*global color */
+import d3tip from "d3-tip";
 
-
-/*const handleMouseOver = (d, i, n) => {
-    console.log(n[i]);
-};*/
 
 
 
@@ -40,7 +35,6 @@ class Chart extends Component {
             radius: 150
         };
 
-
         const cent = {
             x: (dims.width / 2 + 5),
             y: (dims.height / 2 + 5)
@@ -51,15 +45,10 @@ class Chart extends Component {
             .attr('width', dims.width + 150)
             .attr('height', dims.height + 150);
 
-
         const color = d3.scaleOrdinal(d3['schemeSet3']);
-
-
 
         const graph = svg.select('g')
             .attr('transform', `translate(${cent.x},${cent.y})`);
-
-
 
         const pie = d3.pie()
             .sort(null)
@@ -130,6 +119,22 @@ class Chart extends Component {
             .scale(color);
         //=======================End set up=============================//
 
+
+        //=======================D3 tool tip set up=============================//
+        const tip = d3tip()
+            .attr('class', 'tip card')
+            .html(d => {
+                //console.log(d.data.cost);
+                let content = `<div class="name">${d.data.name}</div>`;
+                content += `<div class="cost">${d.data.cost}</div>`;
+                content += `<div class="delete">Click to Delete</div>`;
+                return content;
+            });
+
+        graph.call(tip);
+
+        //========================End=================================//
+
         const data = this.props.data ? this.props.data : null;
         //console.log(data);
 
@@ -170,8 +175,14 @@ class Chart extends Component {
                 .attrTween("d", arcTweenEnter);
 
             graph.selectAll('path')
-                .on('mouseover', handleMouseOver)
-                .on("mouseout", handleMouseOut)
+                .on('mouseover', (d, i, n) => {
+                    tip.show(d, n[i]);
+                    handleMouseOver(d, i, n);
+                })
+                .on("mouseout", (d, i, n) => {
+                    tip.hide();
+                    handleMouseOut(d, i, n);
+                })
                 .on("click", handleClick);
 
         }
