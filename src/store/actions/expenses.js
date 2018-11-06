@@ -12,3 +12,12 @@ export const createExpense = (expense) => {
             .catch(err => console.log(err));
     };
 };
+
+export const deleteExpense = (d) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore();
+        const id = d.data.id;
+        firestore.collection('expenses').doc(id).delete();
+
+    };
+};

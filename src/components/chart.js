@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 //import { handleMouseOver, handleMouseOut } from "../helper/d3events";
 import { legendColor } from 'd3-svg-legend';
+import * as actions from "../store/actions/expenses.js";
 import * as d3 from "d3";
 /*global color */
 
@@ -102,15 +103,20 @@ class Chart extends Component {
         const handleMouseOver = (d, i, n) => {
             //console.log(n[i]);
             d3.select(n[i])
-                .transition().duration(300)
+                .transition('changeSliceFill').duration(300)
                 .attr('fill', 'white');
         };
 
         const handleMouseOut = (d, i, n) => {
+            //console.log(n);
             d3.select(n[i])
-                .transition().duration(300)
+                .transition('changeSliceFill').duration(300)
                 .attr('fill', color(d.data.name));
         };
+
+        const handleClick = (d) => {
+            this.props.deleteExpense(d);
+        }
 
         //=============================End D3 event===================//
 
@@ -165,7 +171,8 @@ class Chart extends Component {
 
             graph.selectAll('path')
                 .on('mouseover', handleMouseOver)
-                .on("mouseout", handleMouseOut);
+                .on("mouseout", handleMouseOut)
+                .on("click", handleClick);
 
         }
 
@@ -195,4 +202,10 @@ const mapStateToProps = state => {
     };
 };
 
-export default compose(firestoreConnect([{ collection: "expenses" }]), connect(mapStateToProps))(Chart);
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteExpense: (d) => dispatch(actions.deleteExpense(d))
+    };
+};
+
+export default compose(firestoreConnect([{ collection: "expenses" }]), connect(mapStateToProps, mapDispatchToProps))(Chart);
