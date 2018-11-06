@@ -2,8 +2,15 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
+//import { handleMouseOver, handleMouseOut } from "../helper/d3events";
 import { legendColor } from 'd3-svg-legend';
 import * as d3 from "d3";
+/*global color */
+
+
+/*const handleMouseOver = (d, i, n) => {
+    console.log(n[i]);
+};*/
 
 
 
@@ -24,6 +31,8 @@ class Chart extends Component {
     }
 
     createPie = () => {
+        //Pie(this.props.data);
+        //================Set up=====================//
         const dims = {
             height: 300,
             width: 300,
@@ -60,7 +69,9 @@ class Chart extends Component {
         const arcPath = d3.arc()
             .outerRadius(dims.radius)
             .innerRadius(dims.radius / 2);
+        //===================End Setup===================================//
 
+        /*=============Custom Tween functions=====================*/
         const arcTweenEnter = (d) => {
             let i = d3.interpolate(d.endAngle, d.startAngle);
             return t => {
@@ -85,8 +96,25 @@ class Chart extends Component {
                 return arcPath(i(t));
             };
         }
+        //=========================End Tween Functions==================//
 
-        //create d3 legend for the chart
+        //=====================D3 Event functions===========================//
+        const handleMouseOver = (d, i, n) => {
+            //console.log(n[i]);
+            d3.select(n[i])
+                .transition().duration(300)
+                .attr('fill', 'white');
+        };
+
+        const handleMouseOut = (d, i, n) => {
+            d3.select(n[i])
+                .transition().duration(300)
+                .attr('fill', color(d.data.name));
+        };
+
+        //=============================End D3 event===================//
+
+        //=================D3 legend chart set up======================//
         const legendGroup = svg.select('#legend')
             .attr('transform', `translate(${dims.width+40},10)`);
 
@@ -94,15 +122,21 @@ class Chart extends Component {
             .shape('circle')
             .shapePadding(10)
             .scale(color);
+        //=======================End set up=============================//
 
         const data = this.props.data ? this.props.data : null;
         //console.log(data);
 
         if (data) { //if the data is available from reducer
+            //d3 mouseEvent
+
+
             color.domain(data.map(d => d.name));
             //update and call legend
             legendGroup.call(legend);
             legendGroup.selectAll('text').attr('fill', 'white');
+
+
 
             const paths = graph.selectAll('path')
                 .data(pie(data));
@@ -129,8 +163,12 @@ class Chart extends Component {
                 .transition().duration(750)
                 .attrTween("d", arcTweenEnter);
 
+            graph.selectAll('path')
+                .on('mouseover', handleMouseOver)
+                .on("mouseout", handleMouseOut);
 
         }
+
 
     }
 
