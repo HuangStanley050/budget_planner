@@ -21,7 +21,8 @@ class App extends Component {
       );
     }
     else {
-      content = <Auth/>;
+
+      content = <Auth />;
     }
     return (
       <div>
@@ -46,6 +47,7 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     authStatus: state.auth.authStatus
+
   };
 };
 

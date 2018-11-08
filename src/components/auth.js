@@ -39,8 +39,12 @@ class Auth extends Component {
                             </div>
                         </div>
                 <div className="card-action right-align">
+                    
                     <input type="reset" id="reset" className="btn-flat grey-text waves-effect"/>
                     <input type="submit" className="btn green waves-effect waves-light" placeholder="Login"/>
+                    <div>
+                      <span className="red-text">{this.props.error}</span>
+                    </div>
                 </div>
                     </form>
                 </div>
@@ -57,4 +61,10 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+const mapStateToProps = state => {
+    return {
+        error: state.auth.errorMessage
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
