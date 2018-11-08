@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Auth from "./components/auth";
 import Header from "./components/header";
 import Form from "./components/form";
 import Chart from "./components/chart";
@@ -10,12 +10,15 @@ class App extends Component {
     return (
       <div>
       <Header/>
-      <div className="container section">
+      <Auth/>
+      
+      {/*<div className="container section">
         <div className="row">
           <Form/>
           <Chart/>
         </div>
-      </div>
+      </div>*/}
+      
       </div>
 
 
