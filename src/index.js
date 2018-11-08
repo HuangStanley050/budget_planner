@@ -8,14 +8,14 @@ import { reduxFirestore, getFirestore, firestoreReducer } from "redux-firestore"
 import { reactReduxFirebase, getFirebase, firebaseReducer } from "react-redux-firebase";
 import firebaseconfig from "./config/firebase-config.js";
 import authReducer from "./store/reducers/auth.js";
-import dataReducer from "./store/reducers/data.js";
+//import dataReducer from "./store/reducers/data.js";
 import App from './App';
 
 const composeEnhancers = process.env.NODE_ENV === "development" ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    project: dataReducer,
+    //project: dataReducer,
     firestore: firestoreReducer,
     firebase: firebaseReducer
 });
