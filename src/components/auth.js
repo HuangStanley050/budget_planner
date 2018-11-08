@@ -14,6 +14,12 @@ class Auth extends Component {
         });
 
     }
+    handleReset = (e) => {
+        this.setState({
+            username: "",
+            password: ""
+        });
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         //console.log(this.state);
@@ -30,17 +36,17 @@ class Auth extends Component {
                             <div className="row">
                                 <div className="input-field col s12">
                                     <label htmlFor="email">Email address</label>
-                                    <input onChange={this.inputHandler}type="email" className="validate" name="username" id="username" />
+                                    <input onChange={this.inputHandler}type="email" value={this.state.username} className="validate" name="username" id="username" />
                                 </div>
                                 <div className="input-field col s12">
                                     <label htmlFor="password">Password </label>
-                                    <input onChange={this.inputHandler}type="password" className="validate" name="password" id="password" />
+                                    <input onChange={this.inputHandler}type="password" value={this.state.password} className="validate" name="password" id="password" />
                                 </div>
                             </div>
                         </div>
                 <div className="card-action right-align">
                     
-                    <input type="reset" id="reset" className="btn-flat grey-text waves-effect"/>
+                    <button onClick={this.handleReset}type="reset" id="reset" className="btn-flat grey-text waves-effect">Reset</button>
                     <input type="submit" className="btn green waves-effect waves-light" placeholder="Login"/>
                     <div>
                       <span className="red-text">{this.props.error}</span>
