@@ -18,12 +18,12 @@ class Chart extends Component {
     componentDidMount() {
 
         this.createPie();
-        console.log("Mounted");
+
     }
 
     componentDidUpdate() {
         this.createPie();
-        console.log("updated!!");
+
     }
 
     createPie = () => {
@@ -105,7 +105,7 @@ class Chart extends Component {
 
         const handleClick = (d) => {
             this.props.deleteExpense(d);
-        }
+        };
 
         //=============================End D3 event===================//
 
@@ -183,7 +183,10 @@ class Chart extends Component {
                     tip.hide();
                     handleMouseOut(d, i, n);
                 })
-                .on("click", handleClick);
+                .on("click", (d, i, n) => {
+                    tip.hide();
+                    handleClick(d, i, n)
+                });
 
         }
 
